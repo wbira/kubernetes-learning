@@ -1,0 +1,34 @@
+// create two deployments and expose it via service
+kubectl run alpaca-prod \
+--image=wbira/kuard:latest \
+--replicas=3 \
+--port=8080 \
+--labels="ver=1,app=alpaca,env=prod"
+
+kubectl expose deployment alpaca-prod
+
+kubectl run bandicoot-prod \
+--image=wbira/kuard:latest \
+--replicas=2 \
+--port=8080 \
+--labels="ver=2,app=bandicoot,env=prod"
+
+kubectl expose deployment bandicoot-prod
+
+kubectl get services -o wide
+
+// get first pod from selector query and port-forward it
+ALPACA_POD=$(kubectl get pods -l app=alpaca \
+    -o jsonpath='{.items[0].metadata.name}')
+
+kubectl port-forward $ALPACA_POD 48858:8080
+
+// TODO create example with readiness check and watching endpoints
+
+
+// basic service discovery using selectors
+kubectl get pods -o wide --selector=app=alpaca,env=prod
+
+BANDICOOT_POD=$(kubectl get pods -l app=bandicoot \
+    -o jsonpath='{.items[0].metadata.name}')
+kubectl port-forward $BANDICOOT_POD 48858:8080
