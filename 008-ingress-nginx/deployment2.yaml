@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web1
+spec:
+  selector:
+    matchLabels:
+      run: web1
+  replicas: 1
+  template:
+    metadata:
+        labels:
+            run: web1
+    spec:
+      containers:
+      - name: helloworld1
+        image: gcr.io/google-samples/hello-app:2.0
