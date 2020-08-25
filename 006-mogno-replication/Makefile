@@ -7,4 +7,4 @@ service:
 statefulset:
 	kubectl apply -f stateful-set.yaml
 
-run: config service statefulset
+run: config service statefulse
